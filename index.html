@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国KIF1A组织</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            line-height: 1.6;
+        }
+
+        /* 导航栏样式 */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to bottom, rgba(135, 206, 235, 0.95), rgba(255, 255, 255, 0.85));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(to bottom, #bc7777, #ed2d2d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            letter-spacing: 1px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav a {
+            color: #003366;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .nav a:hover {
+            color: #0066cc;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #0066cc, #66b3ff);
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover::after {
+            width: 100%;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            padding: 8px 0;
+        }
+
+        .nav-item:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            display: block;
+            font-size: 14px;
+        }
+
+        .dropdown-content a:hover {
+            background: #f5f5f5;
+        }
+
+        .littlehero {
+            background-color: #e6f7ff;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        /* 英雄网格样式 */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-card {
+            position: relative;
+            height: 360px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .hero-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .hero-card:hover .hero-img {
+            transform: scale(1.05);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 51, 102, 0.85), rgba(102, 179, 255, 0.3));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 30px 20px;
+            text-align: center;
+            transition: background 0.4s ease;
+        }
+
+        .hero-card:hover .hero-overlay {
+            background: linear-gradient(to top, rgba(0, 51, 102, 0.95), rgba(70, 130, 180, 0.4));
+        }
+
+        .hero-name {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .hero-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 25px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            margin-top: 10px;
+        }
+
+        .hero-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .hero-link i {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-link:hover i {
+            transform: translateX(3px);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #003366;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #0066cc, #66b3ff);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        /* Banner样式 */
+        .banner {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            background-color: #e6f7ff;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                margin-bottom: 15px;
+            }
+
+            .nav {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .banner {
+                height: 70vh;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav {
+                gap: 10px;
+            }
+
+            .nav a {
+                font-size: 14px;
+            }
+
+            .banner {
+                height: 60vh;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 1em;
+            color: #003366;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 1.5em;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+
+        .footer {
+            background: linear-gradient(to bottom, #003366, #001a33);
+            color: white;
+            padding: 50px 0 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: #66b3ff;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #aaccff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <header class="header">
+        <a href="#" class="logo">KIF1A.CN</a>
+        <nav class="nav">
+            <div class="nav-item">
+                <a href="#about">KIF1A</a>
+                <div class="dropdown-content">
+                    <a href="#company">疾病症状</a>
+                    <a href="#culture">如何诊断</a>
+                    <a href="#team">注意事项</a>
+                    <a href="#culture">常见问题</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <a href="#services">患者团体</a>
+                <div class="dropdown-content">
+                    <a href="#service1">认识我们</a>
+                    <a href="#service2">加入我们</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <a href="#products">研究进展</a>
+
+            </div>
+            <div class="nav-item">
+                <a href="#home">专家团队</a>
+            </div>
+            <div class="nav-item">
+                <a href="#contact">联系我们</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Banner区域 -->
+    <div class="banner">
+        <div class="carousel">
+            <div class="carousel-item active">
+                <img src="./images/banner.jpg" alt="Banner图片1">
+            </div>
+            <div class="carousel-item">
+                <img src="./images/banner2.jpg" alt="Banner图片2">
+            </div>
+            <div class="carousel-item">
+                <img src="./images/banner3.jpg" alt="Banner图片3">
+            </div>
+            <div class="carousel-item">
+                <img src="./images/banner4.jpg" alt="Banner图片4">
+            </div>
+            <div class="carousel-controls">
+                <div class="carousel-dot active"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <h1>中国KIF1A组织</h1>
+        <p>KIF1A基因相关疾病是一种罕见的神经发育障碍性疾病，由KIF1A基因突变引起。该基因负责编码一种在神经元中运输物质的关键蛋白质。突变会导致神经功能异常，影响患者的运动能力、认知发展和日常生活。</p>
+        <p>我们致力于为KIF1A患者家庭提供支持，推动相关医学研究，促进社会对这一罕见疾病的认知与理解。通过建立患者社群、分享医疗资源和最新研究成果，我们希望帮助患者获得更好的生活质量。</p>
+        <section class="littlehero">
+            <h2 class="section-title">我们的小英雄</h2>
+            <p class="section-subtitle">这些勇敢的孩子每天都在与KIF1A基因突变带来的挑战作斗争，他们的笑容是我们前进的动力</p>
+
+            <div class="hero-grid">
+                <!-- 英雄卡片 1 -->
+                <div class="hero-card">
+                    <img src="./images/littlehero1.jpg" alt="航航" class="hero-img">
+                    <div class="hero-overlay">
+                        <h3 class="hero-name">航航</h3>
+                        <!-- <p class="hero-desc">6岁，来自北京，喜欢音乐和绘画</p>-->
+                        <a href="#" class="hero-link">我的故事 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+        </section>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <ul class="footer-links">
+                    <li>邮箱：cntact@kif1a.cn<o /li>
+                    <li>电话：XXX-XXX-XXXX</li>
+                    <li>地址：XX</li>
+                    <li>微信公众号：浙二吴志英</li>
+                </ul>
+            </div>
+        </div>
+
+        <script>
+            // 轮播图功能
+            document.addEventListener('DOMContentLoaded', function () {
+                const items = document.querySelectorAll('.carousel-item');
+                const dots = document.querySelectorAll('.carousel-dot');
+                let currentIndex = 0;
+
+                function showSlide(index) {
+                    items.forEach(item => item.classList.remove('active'));
+                    dots.forEach(dot => dot.classList.remove('active'));
+
+                    items[index].classList.add('active');
+                    dots[index].classList.add('active');
+                }
+
+                function nextSlide() {
+                    currentIndex = (currentIndex + 1) % items.length;
+                    showSlide(currentIndex);
+                }
+
+                // 点击指示器切换轮播图
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        currentIndex = index;
+                        showSlide(currentIndex);
+                    });
+                });
+
+                // 自动轮播
+                setInterval(nextSlide, 5000);
+            });
+        </script>
+</body>
+
+</html>
